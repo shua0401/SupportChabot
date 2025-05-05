@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.local
+
+# Credentials
+gss_credential.json
+
+# Logs
+log/
+*.log
+
+# IDE
+.vscode/
+.idea/ 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatBot ログ確認システム2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<div>
+    ログ総数: {{ logLineCount }}<br>
+    <a href="" id="log-download">ログ2ファイルのダウンロードはこちら</a>
+    <script>
+        document.getElementById("log-download").href = location.href.split('/').slice(0, -1).join('/') + "/log-download";
+    </script>
+</div>
+
+<div>
+    <hr>
+    <div id="search">
+    <input id="user-input" placeholder="ログファイルを入力"></input>
+    <button id="send-button" onclick="logdata()">送信</button>
+  </div>
+
+  <form id="log-form" action="/log-download2" method="POST" style="display: none;">
+    <input type="hidden" id="hidden-input" name="responseSheetID">
+  </form>
+
+  <script>
+    function logdata() {
+      var userInput = document.getElementById('user-input').value;
+      console.log(userInput);
+
+      // フォームに値を設定して送信
+      document.getElementById('hidden-input').value = userInput;
+      document.getElementById('log-form').submit();
+    }
+  </script>
+
+    ログの絞り込み<br>
+    <div>
+        <input type="date" id="start-date" name="start_date" value=""/>
+         -
+        <input type="date" id="end-date" name="end_date" value=""/>
+
+        <select id="select-weekday" name="select_weekday">
+            <option value="-1">全曜日</option>
+            <option value="0">月</option>
+            <option value="1">火</option>
+            <option value="2">水</option>
+            <option value="3">木</option>
+            <option value="4">金</option>
+            <option value="5">土</option>
+            <option value="6">日</option>
+        </select>
+
+        <select id="select-class" name="select_class">
+            <option value="1">1限</option>
+            <option value="2">2限</option>
+            <option value="3">3限</option>
+            <option value="3">4限</option>
+            <option value="4">5限</option>
+            <option value="all">1限～5限</option>
+        </select>
+
+        <br>
+        <button id="get-date" onclick="requestLog();">絞り込み</button>
+
+        <script>
+            function requestLog(){
+                const startDate = document.getElementById("start-date").value;
+                const endDate = document.getElementById("end-date").value;
+                const selectWeekDay = document.getElementById("select-weekday").value;
+                const selectClass = document.getElementById("select-class").value;
+
+                document.getElementById("get-date").disabled = true;
+
+                $.ajax({
+                    url: "/log",
+                    type: "POST",
+                    data: {
+                        startDate: startDate,
+                        endDate: endDate,
+                        selectWeekDay: selectWeekDay,
+                        selectClass: selectClass
+                    },
+                    success: function(response){
+                        const result = response["res"];
+                        document.getElementById("result").innerHTML = result;
+
+                        document.getElementById("get-date").disabled = false;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+
+                        document.getElementById("get-data").disabled = false;
+                    }
+                })
+            }
+        </script>
+
+        <div id="result">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

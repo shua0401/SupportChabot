@@ -1,0 +1,22 @@
+/*チャット画面のスクロール設定*/
+#chatbot-body {
+    /*横向きのスクロール禁止*/
+    overflow-x: hidden;
+    /*縦向きのスクロール許可*/
+    overflow-y: scroll;
+    /*スマホでは指でスクロール*/
+    -webkit-overflow-scrolling: touch;
+}
+
+/*ロボットの吹き出し*/
+.chatbot-left{
+    margin-left: 20px;
+    border-radius: 0 9px 9px 9px;
+}
+
+/*自分の吹き出し*/
+.chatbot-right{
+    margin-right: 20px;
+    text-align: left;
+    border-radius: 9px 0 9px 9px;
+}
